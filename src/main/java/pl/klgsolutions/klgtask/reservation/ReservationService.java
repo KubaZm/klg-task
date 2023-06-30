@@ -1,11 +1,15 @@
 package pl.klgsolutions.klgtask.reservation;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.klgsolutions.klgtask.objectforrent.ObjectForRent;
 import pl.klgsolutions.klgtask.objectforrent.ObjectForRentService;
 import pl.klgsolutions.klgtask.person.Person;
 import pl.klgsolutions.klgtask.person.PersonService;
+import pl.klgsolutions.klgtask.reservation.dto.CreateReservationRequest;
+import pl.klgsolutions.klgtask.reservation.dto.ReservationDto;
+import pl.klgsolutions.klgtask.reservation.dto.ReservationMapper;
 import pl.klgsolutions.klgtask.reservation.exceptions.*;
 
 import java.util.List;
@@ -24,53 +28,41 @@ public class ReservationService {
     @Autowired
     private PersonService personService;
 
-    public List<Reservation> getReservationsByRenter(String name) throws PersonDoesntExistException {
+    private final ReservationMapper mapper = Mappers.getMapper(ReservationMapper.class);
+
+    public List<ReservationDto> getReservationsByRenter(String name) throws PersonDoesntExistException {
         if (personService.checkIfPersonExistsByName(name))
-            return reservationRepository.findAllByRenterNameIgnoreCase(name);
+            return mapper.reservationListToDtoList(reservationRepository.findAllByRenterNameIgnoreCase(name));
         else
             throw new PersonDoesntExistException();
 
     }
 
-    public List<Reservation> getReservationsByObject(String name) throws ObjectDoesntExistException {
+    public List<ReservationDto> getReservationsByObject(String name) throws ObjectDoesntExistException {
         if (objectForRentService.checkIfObjectExistsByName(name))
-            return reservationRepository.findAllByObjectNameIgnoreCase(name);
+            return mapper.reservationListToDtoList(reservationRepository.findAllByObjectNameIgnoreCase(name));
         else
             throw new ObjectDoesntExistException();
     }
 
-    public Reservation createReservation(Reservation reservation) throws NoNameProvidedException, PersonDoesntExistException, ObjectDoesntExistException {
-        validateCreateReservationRequest(reservation);
-        return reservationRepository.save(reservation);
-    }
-
-    public Reservation updateReservation(Reservation reservation) throws NoNameProvidedException, PersonDoesntExistException, ObjectDoesntExistException, NoIdProvidedException {
-        validateUpdateReservationRequest(reservation);
-        return reservationRepository.save(reservation);
-    }
-
-
-    private void validateCreateReservationRequest(Reservation reservation) throws NoNameProvidedException, ObjectDoesntExistException, PersonDoesntExistException {
-        reservation.setId(null);
-
+    public ReservationDto createReservation(CreateReservationRequest request) throws NoNameProvidedException, PersonDoesntExistException, ObjectDoesntExistException {
+        Reservation reservation = mapper.createReservationRequestToReservation(request);
         validateNames(reservation);
+        validateObjectAvailability(reservation, false);
+        return mapper.reservationToDto(reservationRepository.save(reservation));
+    }
+
+    public ReservationDto updateReservation(ReservationDto reservationDto) throws NoNameProvidedException, PersonDoesntExistException, ObjectDoesntExistException {
+        Reservation reservation = mapper.dtoToReservation(reservationDto);
+        validateNames(reservation);
+        validateObjectAvailability(reservation, true);
+        return mapper.reservationToDto(reservationRepository.save(reservation));
+    }
+
+    private void validateObjectAvailability(Reservation reservation, boolean isUpdateRequest) {
 
         reservationRepository.findAllByObjectId(reservation.getObject().getId()).forEach(r -> {
-            if ((reservation.getStartDate().after(r.getStartDate()) && reservation.getStartDate().before(r.getEndDate())) ||
-                    (reservation.getEndDate().after(r.getStartDate()) && reservation.getEndDate().after(r.getEndDate())))
-                throw new ObjectNotAvailableException();
-
-        });
-    }
-
-    private void validateUpdateReservationRequest(Reservation reservation) throws NoNameProvidedException, ObjectDoesntExistException, PersonDoesntExistException, NoIdProvidedException {
-        if (reservation.getId() == null)
-            throw new NoIdProvidedException();
-
-        validateNames(reservation);
-
-        reservationRepository.findAllByObjectId(reservation.getObject().getId()).forEach(r -> {
-            if (!Objects.equals(reservation.getId(), r.getId())) {
+            if (!isUpdateRequest || !Objects.equals(reservation.getId(), r.getId())) { // for update requests we want to skip checking availability of the object in the very reservation we want to change
                 if ((reservation.getStartDate().after(r.getStartDate()) && reservation.getStartDate().before(r.getEndDate())) ||
                         (reservation.getEndDate().after(r.getStartDate()) && reservation.getEndDate().after(r.getEndDate())))
                     throw new ObjectNotAvailableException();
