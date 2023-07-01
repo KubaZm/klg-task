@@ -1,13 +1,17 @@
 package pl.klgsolutions.klgtask.reservation.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 import pl.klgsolutions.klgtask.objectforrent.dto.ObjectForRentDto;
 import pl.klgsolutions.klgtask.person.dto.PersonDto;
 
 import java.sql.Date;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateReservationRequest {
 
     @NotNull
