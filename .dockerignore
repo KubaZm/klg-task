@@ -33,3 +33,6 @@ build/
 .vscode/
 
 README.md
+
+.gitignore
+zadanie_referencyjne_Java_Spring.pdf
