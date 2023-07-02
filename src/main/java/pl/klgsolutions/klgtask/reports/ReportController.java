@@ -16,13 +16,21 @@ public class ReportController {
 
     @GetMapping("/object")
     public String getObjectReport(Model model, @RequestParam String object, @RequestParam String from, @RequestParam String to) {
-        model.addAttribute("data", reportService.getObjectReport(object, from, to));
-        return "object-report";
+        try {
+            model.addAttribute("data", reportService.getObjectReport(object, from, to));
+            return "object-report";
+        } catch (Exception e) {
+            return "report-error";
+        }
     }
 
     @GetMapping("/landlords")
     public String getLandlordsReport(Model model, @RequestParam String from, @RequestParam String to) {
-        model.addAttribute("data", reportService.getLandlordsReport(from, to));
-        return "landlords-report";
+        try {
+            model.addAttribute("data", reportService.getLandlordsReport(from, to));
+            return "landlords-report";
+        } catch (Exception e) {
+            return "report-error";
+        }
     }
 }

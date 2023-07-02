@@ -1,4 +1,4 @@
-package pl.klgsolutions.klgtask.reports;
+package pl.klgsolutions.klgtask.reports.data;
 
 import lombok.Builder;
 import lombok.Getter;

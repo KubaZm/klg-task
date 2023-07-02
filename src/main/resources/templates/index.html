@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation manager</title>
+</head>
+<body>
+<h1>Welcome to Reservation manager app!</h1>
+<h2>REST endpoints available:</h2>
+<h3>List all reservations by object:</h3>
+<h3>GET /reservations/object/{name} where <i>name</i> is one of:</h3>
+<ul th:each="object : ${data.objects}">
+  <li><span th:text="${object}"/></li>
+</ul>
+<br>
+<h3>List all reservations by renter:</h3>
+<h3>GET /reservations/renter/{name} where <i>name</i> is one of:</h3>
+<ul th:each="person : ${data.people}">
+    <li><span th:text="${person}"/></li>
+</ul>
+<br>
+<h3>Create reservation:</h3>
+<h3>POST /reservations</h3>
+<br>
+<h3>Update reservation:</h3>
+<h3>PUT /reservations</h3>
+<br>
+<h3>Request body structure is provided in README.md file.</h3>
+<br>
+<h2>Reports (in html)</h2>
+<h3>Object summary::</h3>
+<h3>/reports/object</h3>
+<h3>Params:</h3>
+<ul>
+    <li><b>object</b>,</li>
+    <li><b>from</b> in YYYY-MM-DD format,</li>
+    <li><b>to</b> in YYYY-MM-DD format.</li>
+</ul>
+<br>
+<h3>Landlords summary::</h3>
+<h3>/reports/landlords</h3>
+<h3>Params:</h3>
+<ul>
+    <li><b>from</b> in YYYY-MM-DD format,</li>
+    <li><b>to</b> in YYYY-MM-DD format.</li>
+</ul>
+</body>
+</html>

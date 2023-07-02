@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.klgsolutions.klgtask.person.Person;
 import pl.klgsolutions.klgtask.person.PersonService;
+import pl.klgsolutions.klgtask.reports.data.LandlordDetailData;
+import pl.klgsolutions.klgtask.reports.data.LandlordReportData;
+import pl.klgsolutions.klgtask.reports.data.ObjectReportData;
 import pl.klgsolutions.klgtask.reservation.ReservationRepository;
 
 import java.sql.Date;
