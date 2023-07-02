@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Landlords report</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Landlords report</h1>
+<h2>Peroid: <span th:text="${data.from}"/> - <span th:text="${data.to}"/></h2>
+
+<div th:each="details : ${data.details}">
+    <h3>Landlord's name: <span th:text="${details.name}"/></h3>
+    <h3>Number of distinct objects reserved: <span th:text="${details.objectCount}"/></h3>
+    <h3>Total number of guests: <span th:text="${details.guestCount}"/></h3>
+    <h3>Total income: <span th:text="${details.income}"/></h3>
+    <br>
+</div>
+
+</body>
+</html>

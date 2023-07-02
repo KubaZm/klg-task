@@ -64,7 +64,7 @@ public class ReservationService {
         reservationRepository.findAllByObjectId(reservation.getObject().getId()).forEach(r -> {
             if (!isUpdateRequest || !Objects.equals(reservation.getId(), r.getId())) { // for update requests we want to skip checking availability of the object in the very reservation we want to change
                 if ((reservation.getStartDate().after(r.getStartDate()) && reservation.getStartDate().before(r.getEndDate())) ||
-                        (reservation.getEndDate().after(r.getStartDate()) && reservation.getEndDate().after(r.getEndDate())))
+                        (reservation.getEndDate().after(r.getStartDate()) && reservation.getEndDate().before(r.getEndDate())))
                     throw new ObjectNotAvailableException();
             }
         });
