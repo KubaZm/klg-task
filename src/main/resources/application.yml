@@ -5,5 +5,8 @@ spring:
       additional-paths: src/main/java # restart directory
   jpa:
     defer-datasource-initialization: true
+server:
+  error:
+    include-message: always
 
 

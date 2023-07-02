@@ -38,24 +38,24 @@ public class ReportService {
                 .forEach(reservation -> {
                     //the reservation dates are between the range of query parameters
                     if (reservation.getStartDate().after(fromDate) && reservation.getEndDate().before(toDate)) {
-                        reservationDays.addAndGet(ChronoUnit.DAYS.between(reservation.getStartDate().toLocalDate(), reservation.getEndDate().toLocalDate()));
+                        reservationDays.addAndGet(ChronoUnit.DAYS.between(reservation.getStartDate().toLocalDate(), reservation.getEndDate().toLocalDate()) + 1);
                         reservationCount.getAndIncrement();
                     }
                     //the "from" parameter is before reservation startDate and the "to" parameter is between reservation's startDate and endDate
                     else if (reservation.getStartDate().after(fromDate) && reservation.getStartDate().compareTo(toDate) <= 0 &&
                             reservation.getEndDate().compareTo(toDate) >= 0) {
-                        reservationDays.addAndGet(ChronoUnit.DAYS.between(reservation.getStartDate().toLocalDate(), toDate.toLocalDate()));
+                        reservationDays.addAndGet(ChronoUnit.DAYS.between(reservation.getStartDate().toLocalDate(), toDate.toLocalDate()) + 1);
                         reservationCount.getAndIncrement();
                     }
                     //the "to" parameter is after reservation endDate and the "from" parameter is between reservation's startDate and endDate
                     else if (reservation.getStartDate().compareTo(fromDate) <= 0 && reservation.getEndDate().compareTo(fromDate) >= 0 &&
                             reservation.getEndDate().before(toDate)) {
-                        reservationDays.addAndGet(ChronoUnit.DAYS.between(fromDate.toLocalDate(), reservation.getEndDate().toLocalDate()));
+                        reservationDays.addAndGet(ChronoUnit.DAYS.between(fromDate.toLocalDate(), reservation.getEndDate().toLocalDate()) + 1);
                         reservationCount.getAndIncrement();
                     }
                     //the range of query parameters is between the reservation dates
                     else if (reservation.getStartDate().compareTo(fromDate) <= 0 && reservation.getEndDate().compareTo(toDate) >= 0) {
-                        reservationDays.addAndGet(ChronoUnit.DAYS.between(fromDate.toLocalDate(), toDate.toLocalDate()));
+                        reservationDays.addAndGet(ChronoUnit.DAYS.between(fromDate.toLocalDate(), toDate.toLocalDate()) + 1);
                         reservationCount.getAndIncrement();
                     }
                 });
