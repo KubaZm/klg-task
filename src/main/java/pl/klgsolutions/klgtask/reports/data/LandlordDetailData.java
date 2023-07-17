@@ -6,14 +6,20 @@ import lombok.*;
 @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class LandlordDetailData {
 
     private String name;
 
-    private int objectCount;
+    private Long objectCount;
 
-    private int guestCount;
+    private Long guestCount;
 
-    private Float income;
+    private Double income;
+
+    public LandlordDetailData(String name, Long objectCount, Long guestCount, Double income) {
+        this.name = name;
+        this.objectCount = objectCount;
+        this.guestCount = guestCount;
+        this.income = income;
+    }
 }

@@ -1,5 +1,5 @@
 # Reservation manager
-Recruitment task for KLG Solutions by Jakub Zmuda, 02.07.2023
+Recruitment task for KLG Solutions by Jakub Zmuda, 02.07.2023 (update 17.07.2023)
 
 ## Requirements
 
