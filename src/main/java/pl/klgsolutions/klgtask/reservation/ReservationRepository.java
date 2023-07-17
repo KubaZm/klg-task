@@ -22,10 +22,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
                         "r.object.name, CAST(:from AS string), CAST(:to AS string), " +
                         " SUM( " +
                             "CASE " +
-                                "WHEN r.startDate BETWEEN :from AND :to AND r.endDate BETWEEN :from AND :to THEN CAST(FUNCTION('DATEDIFF', DAY, r.startDate, r.endDate) + 1 AS long) " + // using date subtraction with dates from db returns nanoseconds between the dates, so I call HSQLDB native DATEDIFF function with DAY parameter
-                                "WHEN :from < r.startDate AND :to BETWEEN r.startDate AND r.endDate THEN CAST(FUNCTION('DATEDIFF', DAY, r.startDate, :to) + 1 AS long) " +
-                                "WHEN :to > r.endDate AND :from BETWEEN r.startDate AND r.endDate THEN CAST(FUNCTION('DATEDIFF', DAY, :from, r.endDate) + 1 AS long) " +
-                                "WHEN :from BETWEEN r.startDate AND r.endDate AND :to BETWEEN r.startDate AND r.endDate THEN CAST(FUNCTION('DATEDIFF', DAY, :from, :to) + 1 AS long) " + // but here works fine out of the box :)
+                                "WHEN r.startDate BETWEEN :from AND :to AND r.endDate BETWEEN :from AND :to THEN FUNCTION('DATEDIFF', DAY, r.startDate, r.endDate) + 1 " + // using date subtraction with dates from db returns nanoseconds between the dates, so I call HSQLDB native DATEDIFF function with DAY parameter
+                                "WHEN :from < r.startDate AND :to BETWEEN r.startDate AND r.endDate THEN FUNCTION('DATEDIFF', DAY, r.startDate, :to) + 1  " +
+                                "WHEN :to > r.endDate AND :from BETWEEN r.startDate AND r.endDate THEN FUNCTION('DATEDIFF', DAY, :from, r.endDate) + 1 " +
+                                "WHEN :from BETWEEN r.startDate AND r.endDate AND :to BETWEEN r.startDate AND r.endDate THEN FUNCTION('DATEDIFF', DAY, :from, :to) + 1  " + // but here works fine out of the box :)
                                 "ELSE 0 " +
                             "END " +
                         "), " +
