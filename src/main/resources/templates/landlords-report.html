@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Landlords report</h1>
-<h2>Peroid: <span th:text="${data.from}"/> - <span th:text="${data.to}"/></h2>
+<h2>Period: <span th:text="${data.from}"/> - <span th:text="${data.to}"/></h2>
 
 <div th:each="details : ${data.details}">
     <h3>Landlord's name: <span th:text="${details.name}"/></h3>

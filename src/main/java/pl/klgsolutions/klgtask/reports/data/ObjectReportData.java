@@ -15,7 +15,15 @@ public class ObjectReportData {
 
     private String to;
 
-    private long reservationDays;
+    private Long reservationDays;
 
-    private int reservationCount;
+    private Long reservationCount;
+
+    public ObjectReportData(String objectName, String from, String to, Long reservationDays, Long reservationCount) {
+        this.objectName = objectName;
+        this.from = from;
+        this.to = to;
+        this.reservationDays = reservationDays;
+        this.reservationCount = reservationCount;
+    }
 }
